@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 """ Flask Application """
+import uuid
 from models import storage
+from models.place import Place
+from models.amenity import Amenity
+from models.state import State
 from api.v1.views import app_views
 from os import environ
 from flask import Flask, render_template, make_response, jsonify
