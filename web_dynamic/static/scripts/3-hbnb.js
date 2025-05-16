@@ -37,15 +37,18 @@ $(document).ready(function() {
     contentType: 'application/json',
     dataType: 'json',
     data: '{}',
-    success: function(res, textStatus) {
+    success: function(places, textStatus) {
       // creates article tags in sections
       $('<article></article>').appendTo('section.places');
       $('<div></div>').addClass('title_box').appendTo('article');
-      if (res.length < 100) {
+      if (places.length === 0) {
         // no places to render
         $('<div>No places!</div>').appendTo('div.title_box');
-      } else if (textStatus === 'success' && res.length > 0) {
-        // NotImplementedError
+      } else if (textStatus === 'success' && places.length > 0) {
+        // loop through the response
+        const place = places[0];
+        $(`<h2>${place.name}</h2>`).appendTo($('.title_box'));
+        $(`<div>${place.price_by_night}</div>`).addClass('price_by_night').appendTo($('.title_box'));
       } else {
         console.error('an error occured');
       }
