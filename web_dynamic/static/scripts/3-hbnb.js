@@ -47,15 +47,29 @@ $(document).ready(function() {
       } else if (textStatus === 'success' && places.length > 0) {
         // loop through the response
         for (const place of places) {
-          const new_article = $('<article></article>').appendTo($('section.places'));
-          const new_div = $('<div></div>').addClass('title_box').appendTo(new_article);
-          $(`<h2>${place.name}</h2>`).appendTo(new_div);
-          $(`<div>${place.price_by_night}</div>`).addClass('price_by_night').appendTo(new_div);
+          const article = $('<article></article>').appendTo($('section.places'));
+          const title = $('<div></div>').addClass('title_box').appendTo(article);
+          $(`<h2>${place.name}</h2>`).appendTo(title);
+          $(`<div>${place.price_by_night}</div>`).addClass('price_by_night').appendTo(title);
           // create an info. div element
-          const info_div = $('<div></div>').addClass('information').appendTo(new_article);
-          const guest_div = $(`<div>${place.max_guest} Guest${place.max_guest > 1 ? 's': ''}</div>`).addClass('max_guest').appendTo(info_div);
-          const room_div = $(`<div>${place.number_rooms} Bedroom${place.number_rooms > 1 ? 's': ''}</div>`).addClass('number_rooms').appendTo(info_div);
-          const bath_div = $(`<div>${place.number_bathrooms} Bathroom${place.number_bathrooms > 1 ? 's' : ''}</div>`).addClass('number_bathrooms').appendTo(info_div);
+          const info = $('<div></div>').addClass('information').appendTo(article);
+          const guests = $(`<div>${place.max_guest} Guest${place.max_guest > 1 ? 's': ''}</div>`)
+            .addClass('max_guest')
+            .appendTo(info);
+          const rooms = $(`<div>${place.number_rooms} Bedroom${place.number_rooms > 1 ? 's': ''}</div>`)
+            .addClass('number_rooms')
+            .appendTo(info);
+          const bathrooms = $(`<div>${place.number_bathrooms} Bathroom${place.number_bathrooms > 1 ? 's' : ''}</div>`)
+            .addClass('number_bathrooms')
+            .appendTo(info);
+          // create a user
+          const uri = `http://172.21.68.106:5001/api/v1/users/${place.user_id}`;
+          $.get(uri, function(users) {
+            const user = $(`<div><b>Owner: </b>${users.first_name} ${users.last_name}</div>`)
+              .addClass('user')
+              .appendTo(article);
+            const desc = $(`<div>${place.description}<div>`).addClass('description').appendTo(article);
+          });
         }
       } else {
         console.error('an error occured');
