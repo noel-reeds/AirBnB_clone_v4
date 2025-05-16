@@ -39,16 +39,24 @@ $(document).ready(function() {
     data: '{}',
     success: function(places, textStatus) {
       // creates article tags in sections
-      $('<article></article>').appendTo('section.places');
-      $('<div></div>').addClass('title_box').appendTo('article');
       if (places.length === 0) {
         // no places to render
+        $('<article></article>').appendTo('section.places');
+        $('<div></div>').addClass('title_box').appendTo('article');
         $('<div>No places!</div>').appendTo('div.title_box');
       } else if (textStatus === 'success' && places.length > 0) {
         // loop through the response
-        const place = places[0];
-        $(`<h2>${place.name}</h2>`).appendTo($('.title_box'));
-        $(`<div>${place.price_by_night}</div>`).addClass('price_by_night').appendTo($('.title_box'));
+        for (const place of places) {
+          const new_article = $('<article></article>').appendTo($('section.places'));
+          const new_div = $('<div></div>').addClass('title_box').appendTo(new_article);
+          $(`<h2>${place.name}</h2>`).appendTo(new_div);
+          $(`<div>${place.price_by_night}</div>`).addClass('price_by_night').appendTo(new_div);
+          // create an info. div element
+          const info_div = $('<div></div>').addClass('information').appendTo(new_article);
+          const guest_div = $(`<div>${place.max_guest} Guest${place.max_guest > 1 ? 's': ''}</div>`).addClass('max_guest').appendTo(info_div);
+          const room_div = $(`<div>${place.number_rooms} Bedroom${place.number_rooms > 1 ? 's': ''}</div>`).addClass('number_rooms').appendTo(info_div);
+          const bath_div = $(`<div>${place.number_bathrooms} Bathroom${place.number_bathrooms > 1 ? 's' : ''}</div>`).addClass('number_bathrooms').appendTo(info_div);
+        }
       } else {
         console.error('an error occured');
       }
