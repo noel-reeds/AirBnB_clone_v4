@@ -30,8 +30,8 @@ $(document).ready(function () {
               type: 'GET',
               contentType: 'application/json',
               dataType: 'json',
-              success: function(places_amenities, textStatus) {
-                if (selected_amenities.every(amenity => places_amenities.includes(amenity))) {
+              success: function(place_amenities, textStatus) {
+                if (selected_amenities.every(amenity => place_amenities.includes(amenity))) {
                   //append place with selected amenities
             	  const article = $('<article></article>').appendTo($('section.places'));
           		  const title = $('<div></div>').addClass('title_box').appendTo(article);
@@ -57,6 +57,9 @@ $(document).ready(function () {
             		const desc = $(`<div>${place.description}<div>`).addClass('description').appendTo(article);
                   });
                 }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              console.error(`Error loading amenities for place ${place.id}:`, textStatus, errorThrown);
             }
           });
           }
